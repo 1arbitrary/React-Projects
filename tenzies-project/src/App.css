@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --MAIN-FONT: "Parisienne", 'IBM Plex Sans Condensed', 'Arial';
+    --NORMAL-FONT-WEIGHT: 800;
+    --HEADING-FONT-SIZE: 5rem;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.main-heading {
+    font-size: var(--HEADING-FONT-SIZE);
+    text-align: center;
+    margin-block: 2rem;
+    font-family: var(--MAIN-FONT);
+    font-weight: var(--NORMAL-FONT-WEIGHT);
+}
+
+.text-div {
+    display: flex;
+    justify-content: center;
+}
+
+.text-div > h3 {
+    padding: 1.5rem 0 0 1.5rem;
+    width: 750;
+    letter-spacing: 3px;
+    line-height: 1.65;
+    font-family: "IBM Plex Sans Condensed";
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.rand-buttons {
+    background-color: white;
+    box-shadow: 1px 1px 5px grey;
+    border-radius: 10px;
+    font-size: 2.5rem;
+    font-weight: bolder;
+}
+
+.outer-btn-div {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.btn-div-main {
+    display: grid;
+    grid-template-columns: repeat(5, 100px);
+    grid-auto-rows: 100px;
+    justify-content: center;
+    gap: 2rem 2rem;
+    margin: 4rem 0 4rem 0;
+}
+
+.roll-btn {
+    width: auto;
+    white-space: nowrap;
+    padding: 6px 21px;
+    height: 80px;
+    font-size: 2rem;
+    background-color: blue;
+    color: white;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 15px;
+}
