@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 import Header from "./Components/Header/Header";
@@ -7,6 +7,7 @@ import "./App.css";
 
 export default function App() {
 	const { width, height } = useWindowSize();
+	const btnRef = useRef<HTMLButtonElement | null>(null);
 
 	type diceObj = {
 		randomNumber: number;
@@ -25,7 +26,7 @@ export default function App() {
 	}
 
 	function rollDice(): void {
-		if (gameStatus === true) {
+		if (gameWon === true) {
 			setGeneratedNumbers(generateAllNewDice());
 		} else {
 			setGeneratedNumbers(prev => {
@@ -39,15 +40,29 @@ export default function App() {
 	const [generatedNumbers, setGeneratedNumbers] = useState<diceObj[]>(() => generateAllNewDice());
 	const randNums = generatedNumbers.map((currentDiceObj) => <Dice value={currentDiceObj.randomNumber} isOn={currentDiceObj.isHeld} id={currentDiceObj.id} hold={freezeValue} key={currentDiceObj.id} />);
 
-	const gameStatus: boolean = generatedNumbers.length > 0 && generatedNumbers.every((currentDiceObj) => currentDiceObj.isHeld === true && currentDiceObj.randomNumber === generatedNumbers[0].randomNumber);
+	const gameWon: boolean = generatedNumbers.length > 0 && generatedNumbers.every((currentDiceObj) => (currentDiceObj.isHeld === true && currentDiceObj.randomNumber === generatedNumbers[0].randomNumber));
+
+	useEffect(() => {
+		if (btnRef.current === null) return;
+		if (gameWon) {
+			btnRef.current.style.border = '4px solid pink';
+			btnRef.current.focus();
+		} else {
+			btnRef.current.style.border = 'none';
+		}
+
+	}, [gameWon]);
 
 	return (
 		<>
-			{gameStatus && <Confetti width={width} height={height} />}
+			{gameWon && <Confetti width={width} height={height} />}
+			<div aria-live="polite" className="sr-only">
+				{(gameWon) && <p>Congratulations ! You won! Please press "New Game" to start again. </p>}
+			</div>
 			<Header />
 			<div className="outer-btn-div">
 				<div className="btn-div-main">{randNums}</div>
-				<button className="roll-btn" onClick={rollDice}>{(gameStatus) ? "New Game" : "Roll"}</button>
+				<button className="roll-btn" onClick={rollDice} ref={btnRef} >{(gameWon) ? "New Game" : "Roll"}</button>
 			</div>
 		</>
 	);

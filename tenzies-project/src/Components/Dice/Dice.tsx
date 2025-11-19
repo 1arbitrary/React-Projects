@@ -5,6 +5,8 @@ export default function Dice({ value, id, isOn, hold }: { value: number; id: num
 
 	return (
 		<button
+			aria-label={`Dice with a value of ${value}, ${(isOn) ? "Held" : "Not Held"}`}
+			aria-pressed={isOn}
 			className="rand-buttons"
 			style={styles}
 			onClick={() => hold(id)}>
