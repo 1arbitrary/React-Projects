@@ -57,13 +57,13 @@ export default function App() {
 
 	useEffect(() => {
 		if (btnRef.current === null) return;
+		// Should track `gameWon` in real time to make sure that its updating the focus based on that.
 		if (gameWon) {
 			btnRef.current.style.border = '4px solid pink';
 			btnRef.current.focus();
 		} else {
 			btnRef.current.style.border = 'none';
 		}
-
 	}, [gameWon]);
 
 	return (
