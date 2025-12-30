@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { languages } from './languages';
+import { wordsArr } from './words';
+import Keyboard from './components/Keyboard';
 import './App.css';
 
 function Header() {
@@ -41,30 +43,21 @@ function LanguageSection({
     textAlign: 'center',
     backgroundColor: bgColor,
   };
+
   return (
     <div className="lang-div" style={styles}>
-      <p>{name}</p>
+      <p style={{ padding: '2px 2px' }}>{name}</p>
     </div>
   );
 }
 
-function Keyboard() {
-  let alphaArr: string[] = [];
-  for (let i: number = 65; i <= 90; i++) {
-    alphaArr.push(String.fromCharCode(i));
-  }
-
-  const mappedAlphaArr = alphaArr.map((alphabet, idx) => (
-    <button key={idx} className="keyboard-button">
-      {alphabet}
-    </button>
-  ));
-  return <div className="keyboard-div">{mappedAlphaArr}</div>;
-}
-
 export default function AssemblyEndGame() {
-  const [currentWord] = useState<string>('React');
-  const mappedArr = currentWord.split('').map((letter, idx) => (
+  const [currentWord, setCurrentWord] = useState<string[]>(() =>
+    wordsArr[Math.floor(Math.random() * wordsArr.length)].split(''),
+  );
+  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
+
+  const mappedArr = currentWord.map((letter, idx) => (
     <span key={idx} className="span-input">
       {letter.toUpperCase()}
     </span>
@@ -88,8 +81,10 @@ export default function AssemblyEndGame() {
         <div className="inner-main-lang-div">{langArr}</div>
       </div>
 
-      <div className="input-div">
-        <p className="input-text">{mappedArr}</p>
+      <div className="input-div">{mappedArr}</div>
+
+      <div className="main-keyboard-div">
+        <Keyboard inputChars={setGuessedLetters} />
       </div>
 
       <div
@@ -99,9 +94,13 @@ export default function AssemblyEndGame() {
           alignItems: 'center',
         }}
       >
-        <Keyboard />
+        <button
+          className="new-game-btn"
+          onClick={() => console.log(guessedLetters)}
+        >
+          New Game
+        </button>
       </div>
-      
     </>
   );
 }
