@@ -127,7 +127,7 @@ header {
   border: none;
 }
 
-.new-game-btn-div {
+.new-game-div {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -49,20 +49,16 @@ function LanguageSection({
   );
 }
 
-function Keyboard({
-  addLetter,
-}: {
-  addLetter: (alphabet: string, idx: number) => void;
-}) {
+function Keyboard({ addLetter }: { addLetter: (alphabet: string) => void }) {
   const alphaArr: string[] = 'abcdefghijklmnopqrstuvwxyz'
     .toUpperCase()
     .split('');
 
-  const mappedAlphaArr = alphaArr.map((alphabet, idx) => (
+  const mappedAlphaArr = alphaArr.map((alphabet) => (
     <button
       key={alphabet}
       className="keyboard-button"
-      onClick={() => addLetter(alphabet, idx)}
+      onClick={() => addLetter(alphabet)}
     >
       {alphabet}
     </button>
@@ -71,14 +67,25 @@ function Keyboard({
   return <div className="keyboard-div">{mappedAlphaArr}</div>;
 }
 
-function Input({ length }: { length: number }) {
-  // Continue from here; broken asf logic
-  function addLetter(alphabet: string, idx: number): void {
-    /* 	setGuessedLetters(); */
+function Input({
+  length,
+  trackNum,
+  setTrackNum,
+}: {
+  length: number;
+  trackNum: number;
+  setTrackNum: (updater: (prev: number) => number) => void;
+}) {
+  function addLetter(alphabet: string): void {
+    if (trackNum >= length) return;
+    setGuessedLetters((prev) => prev.map((elem, idx) => (idx === trackNum) ? (elem = alphabet) : elem));
+    setTrackNum((prev) => prev + 1);
   }
 
   const initialVal: string[] = new Array(length).fill('');
-  const [guessedLetters, setGuessedLetters] = useState<string[]>(initialVal);
+  const [guessedLetters, setGuessedLetters] = useState<string[]>(
+    () => initialVal,
+  );
   const [isActive, setIsActive] = useState<boolean[]>([]);
   const mappedArr = guessedLetters.map((letter, idx) => (
     <span key={idx} className="span-input">
@@ -98,18 +105,15 @@ function Input({ length }: { length: number }) {
 
 function NewGame() {
   return (
-    <div className="new-game-btn-div">
-      <button
-        className="new-game-btn"
-      >
-        New Game
-      </button>
+    <div className="new-game-div">
+      <button className="new-game-btn">New Game</button>
     </div>
   );
 }
 
 export default function AssemblyEndGame() {
-  const [currentWord, setCurrentWord] = useState<string[]>(() =>
+  const [trackNum, setTrackNum] = useState<number>(0);
+  const [currentWord] = useState<string[]>(() =>
     wordsArr[Math.floor(Math.random() * wordsArr.length)]
       .toUpperCase()
       .split(''),
@@ -128,10 +132,17 @@ export default function AssemblyEndGame() {
     <>
       <Header />
       <Status />
+      <p style={{ color: 'white', textAlign: 'center', marginTop: '2rem' }}>
+        {currentWord}
+      </p>
       <div className="main-languages-div">
         <div className="inner-main-lang-div">{langArr}</div>
       </div>
-      <Input length={currentWord.length} />
+      <Input
+        length={currentWord.length}
+        trackNum={trackNum}
+        setTrackNum={setTrackNum}
+      />
       <NewGame />
     </>
   );
