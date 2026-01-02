@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { languages } from './languages';
 import { wordsArr } from './words';
-import Keyboard from './components/Keyboard';
 import './App.css';
 
 function Header() {
@@ -43,7 +42,6 @@ function LanguageSection({
     textAlign: 'center',
     backgroundColor: bgColor,
   };
-
   return (
     <div className="lang-div" style={styles}>
       <p style={{ padding: '2px 2px' }}>{name}</p>
@@ -51,17 +49,71 @@ function LanguageSection({
   );
 }
 
-export default function AssemblyEndGame() {
-  const [currentWord, setCurrentWord] = useState<string[]>(() =>
-    wordsArr[Math.floor(Math.random() * wordsArr.length)].split(''),
-  );
-  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
+function Keyboard({
+  addLetter,
+}: {
+  addLetter: (alphabet: string, idx: number) => void;
+}) {
+  const alphaArr: string[] = 'abcdefghijklmnopqrstuvwxyz'
+    .toUpperCase()
+    .split('');
 
-  const mappedArr = currentWord.map((letter, idx) => (
+  const mappedAlphaArr = alphaArr.map((alphabet, idx) => (
+    <button
+      key={alphabet}
+      className="keyboard-button"
+      onClick={() => addLetter(alphabet, idx)}
+    >
+      {alphabet}
+    </button>
+  ));
+
+  return <div className="keyboard-div">{mappedAlphaArr}</div>;
+}
+
+function Input({ length }: { length: number }) {
+  // Continue from here; broken asf logic
+  function addLetter(alphabet: string, idx: number): void {
+    /* 	setGuessedLetters(); */
+  }
+
+  const initialVal: string[] = new Array(length).fill('');
+  const [guessedLetters, setGuessedLetters] = useState<string[]>(initialVal);
+  const [isActive, setIsActive] = useState<boolean[]>([]);
+  const mappedArr = guessedLetters.map((letter, idx) => (
     <span key={idx} className="span-input">
-      {letter.toUpperCase()}
+      {letter}
     </span>
   ));
+
+  return (
+    <>
+      <div className="input-div">{mappedArr}</div>
+      <div className="main-keyboard-div">
+        <Keyboard addLetter={addLetter} />
+      </div>
+    </>
+  );
+}
+
+function NewGame() {
+  return (
+    <div className="new-game-btn-div">
+      <button
+        className="new-game-btn"
+      >
+        New Game
+      </button>
+    </div>
+  );
+}
+
+export default function AssemblyEndGame() {
+  const [currentWord, setCurrentWord] = useState<string[]>(() =>
+    wordsArr[Math.floor(Math.random() * wordsArr.length)]
+      .toUpperCase()
+      .split(''),
+  );
 
   const langArr = languages.map((lang, idx) => (
     <LanguageSection
@@ -76,31 +128,11 @@ export default function AssemblyEndGame() {
     <>
       <Header />
       <Status />
-
       <div className="main-languages-div">
         <div className="inner-main-lang-div">{langArr}</div>
       </div>
-
-      <div className="input-div">{mappedArr}</div>
-
-      <div className="main-keyboard-div">
-        <Keyboard inputChars={setGuessedLetters} />
-      </div>
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <button
-          className="new-game-btn"
-          onClick={() => console.log(guessedLetters)}
-        >
-          New Game
-        </button>
-      </div>
+      <Input length={currentWord.length} />
+      <NewGame />
     </>
   );
 }

@@ -127,6 +127,12 @@ header {
   border: none;
 }
 
+.new-game-btn-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .new-game-btn {
   width: 300px;
   font-size: 16px;
@@ -136,4 +142,8 @@ header {
   font-weight: var(--NORMAL-FONT-WEIGHT);
   border: none;
   border-radius: 5px;
+}
+
+.active {
+  background-color: green;
 }
