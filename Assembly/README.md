@@ -1,6 +1,6 @@
 # Assembly: Endgame
 
-(<img src="./public/favicon.png"></img>)
+(<img src="./src/favicon.jpg" width=300 height=300></img>)
 
 ## Setup
 
