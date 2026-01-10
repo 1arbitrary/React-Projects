@@ -1,5 +1,7 @@
 # Assembly: Endgame
+
 (<img src="./public/favicon.png"></img>)
+
 ## Setup
 
 Install the dependencies:
@@ -27,4 +29,3 @@ Preview the production build locally:
 ```zsh
 npm run preview
 ```
-

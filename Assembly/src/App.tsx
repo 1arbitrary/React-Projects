@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { clsx } from 'clsx';
 import { languages } from './languages';
 import { wordsArr } from './words';
 import './App.css';
@@ -54,46 +55,78 @@ function Keyboard({ addLetter }: { addLetter: (alphabet: string) => void }) {
     .toUpperCase()
     .split('');
 
-  const mappedAlphaArr = alphaArr.map((alphabet) => (
+   const [isActive, setBtnStatus] = useState<boolean[]>(() =>
+    new Array(alphaArr.length).fill(false),
+  );
+    
+  const mappedAlphaArr = alphaArr.map((alphabet, idx) => (
     <button
       key={alphabet}
-      className="keyboard-button"
-      onClick={() => addLetter(alphabet)}
+      className={clsx('keyboard-btn', isActive[idx] && 'active')}
+      onClick={() => {
+        addLetter(alphabet);
+        setBtnStatus((prev) => {
+          const updatedArray: boolean[] = [...prev];
+          updatedArray[idx] = true;
+          return updatedArray;
+        });
+      }}
     >
       {alphabet}
     </button>
   ));
-
   return <div className="keyboard-div">{mappedAlphaArr}</div>;
 }
 
 function Input({
-  length,
-  trackNum,
-  setTrackNum,
+  currentWord,
+  filledIndexes,
+  setFilledIndexes,
 }: {
-  length: number;
-  trackNum: number;
-  setTrackNum: (updater: (prev: number) => number) => void;
+  currentWord: string[];
+  filledIndexes: number[];
+  setFilledIndexes: (updater: (prev: number[]) => number[]) => void;
 }) {
   function addLetter(alphabet: string): void {
-    if (trackNum >= length) return;
-    setGuessedLetters((prev) => prev.map((elem, idx) => (idx === trackNum) ? (elem = alphabet) : elem));
-    setTrackNum((prev) => prev + 1);
+    const isInCurrentWord: boolean = currentWord.includes(alphabet);
+    if (isInCurrentWord) {
+      const initialIdx: number = currentWord.indexOf(alphabet);
+      if (!filledIndexes.includes(initialIdx)) {
+        setGuessedLetters((prev) => {
+          const updatedArray: string[] = [...prev];
+          updatedArray[initialIdx] = alphabet;
+          return updatedArray;
+        });
+        setFilledIndexes((prev) => [...prev, initialIdx]);
+      } else if (filledIndexes.includes(initialIdx)) {
+        let updatedIdx: number = currentWord.indexOf(alphabet, initialIdx + 1);
+        if (filledIndexes.includes(updatedIdx)) {
+          updatedIdx = currentWord.indexOf(alphabet, updatedIdx + 1);
+        }
+        setGuessedLetters((prev) => {
+          const updatedArray: string[] = [...prev];
+          updatedArray[updatedIdx] = alphabet;
+          return updatedArray;
+        });
+        setFilledIndexes((prev) =>
+          prev.includes(updatedIdx) ? prev : [...prev, updatedIdx],
+        );
+      }
+    }
   }
 
-  const initialVal: string[] = new Array(length).fill('');
+  const initialVal: string[] = new Array(currentWord.length).fill('');
   const [guessedLetters, setGuessedLetters] = useState<string[]>(
     () => initialVal,
   );
-  const [isActive, setIsActive] = useState<boolean[]>([]);
+
   const mappedArr = guessedLetters.map((letter, idx) => (
     <span key={idx} className="span-input">
       {letter}
     </span>
   ));
 
-  return (
+    return (
     <>
       <div className="input-div">{mappedArr}</div>
       <div className="main-keyboard-div">
@@ -112,7 +145,7 @@ function NewGame() {
 }
 
 export default function AssemblyEndGame() {
-  const [trackNum, setTrackNum] = useState<number>(0);
+  const [filledIndexes, setFilledIndexes] = useState<number[]>([]);
   const [currentWord] = useState<string[]>(() =>
     wordsArr[Math.floor(Math.random() * wordsArr.length)]
       .toUpperCase()
@@ -139,9 +172,9 @@ export default function AssemblyEndGame() {
         <div className="inner-main-lang-div">{langArr}</div>
       </div>
       <Input
-        length={currentWord.length}
-        trackNum={trackNum}
-        setTrackNum={setTrackNum}
+        currentWord={currentWord}
+        filledIndexes={filledIndexes}
+        setFilledIndexes={setFilledIndexes}
       />
       <NewGame />
     </>

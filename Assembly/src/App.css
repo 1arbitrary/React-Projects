@@ -117,7 +117,7 @@ header {
   width: 500px;
 }
 
-.keyboard-button {
+.keyboard-btn {
   width: 42px;
   height: 40px;
   background-color: #fcb22f;
@@ -146,4 +146,8 @@ header {
 
 .active {
   background-color: green;
+}
+
+.incorrect {
+    background-color: red;
 }
