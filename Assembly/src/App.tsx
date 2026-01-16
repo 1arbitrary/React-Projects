@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { clsx } from 'clsx';
 import { languages } from './languages';
 import { wordsArr } from './words';
+import { Input } from './components/Input.tsx';
 import './App.css';
 
 function Header() {
@@ -50,27 +51,33 @@ function LanguageSection({
   );
 }
 
-function Keyboard({ addLetter }: { addLetter: (alphabet: string) => void }) {
+export function Keyboard({
+  checkLetter,
+}: {
+  checkLetter: (alphabet: string) => boolean;
+}) {
+  function handleInput(alphabet: string, idx: number): void {
+    setBtnStatus((prev) => {
+      const updatedArray: boolean[] = [...prev];
+      updatedArray[idx] = true;
+      return updatedArray;
+    });
+    const status: boolean = checkLetter(alphabet);
+  }
+
   const alphaArr: string[] = 'abcdefghijklmnopqrstuvwxyz'
     .toUpperCase()
     .split('');
 
-   const [isActive, setBtnStatus] = useState<boolean[]>(() =>
+  const [isActive, setBtnStatus] = useState<boolean[]>(() =>
     new Array(alphaArr.length).fill(false),
   );
-    
+
   const mappedAlphaArr = alphaArr.map((alphabet, idx) => (
     <button
       key={alphabet}
-      className={clsx('keyboard-btn', isActive[idx] && 'active')}
-      onClick={() => {
-        addLetter(alphabet);
-        setBtnStatus((prev) => {
-          const updatedArray: boolean[] = [...prev];
-          updatedArray[idx] = true;
-          return updatedArray;
-        });
-      }}
+      className={clsx('keyboard-btn', isActive[idx])}
+      onClick={() => handleInput(alphabet, idx)}
     >
       {alphabet}
     </button>
@@ -78,78 +85,38 @@ function Keyboard({ addLetter }: { addLetter: (alphabet: string) => void }) {
   return <div className="keyboard-div">{mappedAlphaArr}</div>;
 }
 
-function Input({
-  currentWord,
-  filledIndexes,
-  setFilledIndexes,
+function NewGame({
+  newWord,
+  setCurrentWord,
+  setGuessedLetters,
 }: {
-  currentWord: string[];
-  filledIndexes: number[];
-  setFilledIndexes: (updater: (prev: number[]) => number[]) => void;
+  newWord: () => string[];
+  setCurrentWord: (updater: (prev: string[]) => string[]) => void;
+  setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
 }) {
-  function addLetter(alphabet: string): void {
-    const isInCurrentWord: boolean = currentWord.includes(alphabet);
-    if (isInCurrentWord) {
-      const initialIdx: number = currentWord.indexOf(alphabet);
-      if (!filledIndexes.includes(initialIdx)) {
-        setGuessedLetters((prev) => {
-          const updatedArray: string[] = [...prev];
-          updatedArray[initialIdx] = alphabet;
-          return updatedArray;
-        });
-        setFilledIndexes((prev) => [...prev, initialIdx]);
-      } else if (filledIndexes.includes(initialIdx)) {
-        let updatedIdx: number = currentWord.indexOf(alphabet, initialIdx + 1);
-        if (filledIndexes.includes(updatedIdx)) {
-          updatedIdx = currentWord.indexOf(alphabet, updatedIdx + 1);
-        }
-        setGuessedLetters((prev) => {
-          const updatedArray: string[] = [...prev];
-          updatedArray[updatedIdx] = alphabet;
-          return updatedArray;
-        });
-        setFilledIndexes((prev) =>
-          prev.includes(updatedIdx) ? prev : [...prev, updatedIdx],
-        );
-      }
-    }
+  function generateWord(): void {
+    const updatedWord: string[] = newWord();
+    setCurrentWord(() => updatedWord);
+    setGuessedLetters(() => new Array(updatedWord.length).fill(''));
   }
-
-  const initialVal: string[] = new Array(currentWord.length).fill('');
-  const [guessedLetters, setGuessedLetters] = useState<string[]>(
-    () => initialVal,
-  );
-
-  const mappedArr = guessedLetters.map((letter, idx) => (
-    <span key={idx} className="span-input">
-      {letter}
-    </span>
-  ));
-
-    return (
-    <>
-      <div className="input-div">{mappedArr}</div>
-      <div className="main-keyboard-div">
-        <Keyboard addLetter={addLetter} />
-      </div>
-    </>
-  );
-}
-
-function NewGame() {
   return (
     <div className="new-game-div">
-      <button className="new-game-btn">New Game</button>
+      <button className="new-game-btn" onClick={generateWord}>
+        New Game
+      </button>
     </div>
   );
 }
 
-export default function AssemblyEndGame() {
-  const [filledIndexes, setFilledIndexes] = useState<number[]>([]);
-  const [currentWord] = useState<string[]>(() =>
+export function AssemblyEndGame() {
+  const generateWord = () =>
     wordsArr[Math.floor(Math.random() * wordsArr.length)]
       .toUpperCase()
-      .split(''),
+      .split('');
+
+  const [currentWord, setCurrentWord] = useState<string[]>(generateWord);
+  const [guessedLetters, setGuessedLetters] = useState<string[]>(() =>
+    new Array(currentWord.length).fill(''),
   );
 
   const langArr = languages.map((lang, idx) => (
@@ -173,10 +140,14 @@ export default function AssemblyEndGame() {
       </div>
       <Input
         currentWord={currentWord}
-        filledIndexes={filledIndexes}
-        setFilledIndexes={setFilledIndexes}
+        guessedLetters={guessedLetters}
+        setGuessedLetters={setGuessedLetters}
       />
-      <NewGame />
+      <NewGame
+        newWord={generateWord}
+        setCurrentWord={setCurrentWord}
+        setGuessedLetters={setGuessedLetters}
+      />
     </>
   );
 }
