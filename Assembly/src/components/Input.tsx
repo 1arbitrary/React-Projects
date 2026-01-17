@@ -1,20 +1,34 @@
-import { Keyboard } from '../App.tsx';
+import { Keyboard } from './Keyboard';
+
+type Status = 'correct' | 'incorrect' | 'undecided';
 
 export function Input({
   currentWord,
   guessedLetters,
   setGuessedLetters,
+  setIsCorrect,
+  isCorrect,
 }: {
   currentWord: string[];
   guessedLetters: string[];
   setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
+  isCorrect: string[];
+  setIsCorrect: (updater: (prev: Status[]) => Status[]) => void;
 }) {
-  function checkLetter(alphabet: string): boolean {
+  function assignColor(idx: number, status: boolean): void {
+    setIsCorrect((prev) => {
+      let updatedArray: Status[] = [...prev];
+      updatedArray[idx] = status ? 'correct' : 'incorrect';
+      return updatedArray;
+    });
+  }
+
+  function checkLetter(alphabet: string, idx: number): void {
     if (currentWord.includes(alphabet)) {
       addLetter(alphabet);
-      return true;
+      assignColor(idx, true);
     } else {
-      return false;
+      assignColor(idx, false);
     }
   }
 
@@ -22,7 +36,6 @@ export function Input({
     let indexOfAlphabet: number = currentWord.indexOf(alphabet, 0);
     while (indexOfAlphabet !== -1 && guessedLetters[indexOfAlphabet] !== '') {
       indexOfAlphabet = currentWord.indexOf(alphabet, indexOfAlphabet + 1);
-      if (indexOfAlphabet === -1) return;
     }
     setGuessedLetters((prev) => {
       const updatedArray: string[] = [...prev];
@@ -41,7 +54,7 @@ export function Input({
     <>
       <div className="input-div">{mappedArr}</div>
       <div className="main-keyboard-div">
-        <Keyboard checkLetter={checkLetter} />
+        <Keyboard checkLetter={checkLetter} isCorrect={isCorrect} />
       </div>
     </>
   );

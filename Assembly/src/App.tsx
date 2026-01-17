@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { clsx } from 'clsx';
 import { languages } from './languages';
 import { wordsArr } from './words';
 import { Input } from './components/Input.tsx';
@@ -51,40 +50,6 @@ function LanguageSection({
   );
 }
 
-export function Keyboard({
-  checkLetter,
-}: {
-  checkLetter: (alphabet: string) => boolean;
-}) {
-  function handleInput(alphabet: string, idx: number): void {
-    setBtnStatus((prev) => {
-      const updatedArray: boolean[] = [...prev];
-      updatedArray[idx] = true;
-      return updatedArray;
-    });
-    const status: boolean = checkLetter(alphabet);
-  }
-
-  const alphaArr: string[] = 'abcdefghijklmnopqrstuvwxyz'
-    .toUpperCase()
-    .split('');
-
-  const [isActive, setBtnStatus] = useState<boolean[]>(() =>
-    new Array(alphaArr.length).fill(false),
-  );
-
-  const mappedAlphaArr = alphaArr.map((alphabet, idx) => (
-    <button
-      key={alphabet}
-      className={clsx('keyboard-btn', isActive[idx])}
-      onClick={() => handleInput(alphabet, idx)}
-    >
-      {alphabet}
-    </button>
-  ));
-  return <div className="keyboard-div">{mappedAlphaArr}</div>;
-}
-
 function NewGame({
   newWord,
   setCurrentWord,
@@ -119,6 +84,11 @@ export function AssemblyEndGame() {
     new Array(currentWord.length).fill(''),
   );
 
+  type Status = 'correct' | 'incorrect' | 'undecided';
+  const [isCorrect, setIsCorrect] = useState<Status[]>(() =>
+    new Array(26).fill('undecided'),
+  );
+
   const langArr = languages.map((lang, idx) => (
     <LanguageSection
       name={lang.name}
@@ -142,6 +112,8 @@ export function AssemblyEndGame() {
         currentWord={currentWord}
         guessedLetters={guessedLetters}
         setGuessedLetters={setGuessedLetters}
+        isCorrect={isCorrect}
+        setIsCorrect={setIsCorrect}
       />
       <NewGame
         newWord={generateWord}
