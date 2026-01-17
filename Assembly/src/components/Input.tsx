@@ -1,7 +1,6 @@
 import { Keyboard } from './Keyboard';
 
 type Status = 'correct' | 'incorrect' | 'undecided';
-
 export function Input({
   currentWord,
   guessedLetters,

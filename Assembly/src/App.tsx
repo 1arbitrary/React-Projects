@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { languages } from './languages';
 import { wordsArr } from './words';
 import { Input } from './components/Input.tsx';
+import { NewGame } from './components/NewGame.tsx';
 import './App.css';
 
 function Header() {
@@ -44,34 +45,6 @@ function LanguageSection() {
   return (
     <div className="outer-lang-div">
       <div className="inner-lang-div">{mappedLanguageArray}</div>
-    </div>
-  );
-}
-
-type Status = 'correct' | 'incorrect' | 'undecided';
-
-function NewGame({
-  newWord,
-  setCurrentWord,
-  setGuessedLetters,
-  setIsCorrect,
-}: {
-  newWord: () => string[];
-  setCurrentWord: (updater: (prev: string[]) => string[]) => void;
-  setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
-  setIsCorrect: (updater: (prev: Status[]) => Status[]) => void;
-}) {
-  function generateWord(): void {
-    const updatedWord: string[] = newWord();
-    setCurrentWord(() => updatedWord);
-    setGuessedLetters(() => new Array(updatedWord.length).fill(''));
-    setIsCorrect((prev) => prev.map(() => 'undecided'));
-  }
-  return (
-    <div className="new-game-div">
-      <button className="new-game-btn" onClick={generateWord}>
-        New Game
-      </button>
     </div>
   );
 }
