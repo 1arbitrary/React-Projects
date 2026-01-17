@@ -12,7 +12,7 @@ export function Input({
   currentWord: string[];
   guessedLetters: string[];
   setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
-  isCorrect: string[];
+  isCorrect: Status[];
   setIsCorrect: (updater: (prev: Status[]) => Status[]) => void;
 }) {
   function assignColor(idx: number, status: boolean): void {

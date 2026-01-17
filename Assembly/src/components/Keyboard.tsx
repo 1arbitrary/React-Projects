@@ -1,11 +1,13 @@
 import { clsx } from 'clsx';
 
+type Status = "correct" | 'incorrect' | 'undecided';
+
 export function Keyboard({
   checkLetter,
   isCorrect,
 }: {
   checkLetter: (alphabet: string, idx: number) => void;
-  isCorrect: string[];
+  isCorrect: Status[];
 }) {
   const alphabetArray: string[] = 'abcdefghijklmnopqrstuvwxyz'
     .toUpperCase()
