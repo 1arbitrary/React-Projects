@@ -28,41 +28,44 @@ function Status() {
   );
 }
 
-function LanguageSection({
-  name,
-  bgColor,
-  textColor,
-}: {
-  name: string;
-  bgColor: string;
-  textColor: string;
-}) {
-  const styles: React.CSSProperties = {
-    color: textColor,
-    fontWeight: 500,
-    textAlign: 'center',
-    backgroundColor: bgColor,
-  };
+function LanguageSection() {
+  const mappedLanguageArray = languages.map((lang, idx) => (
+    <button
+      className="lang-btn"
+      key={idx}
+      style={{
+        backgroundColor: lang.backgroundColor,
+        color: lang.textColor,
+      }}
+    >
+      {lang.name}
+    </button>
+  ));
   return (
-    <div className="lang-div" style={styles}>
-      <p style={{ padding: '2px 2px' }}>{name}</p>
+    <div className="outer-lang-div">
+      <div className="inner-lang-div">{mappedLanguageArray}</div>
     </div>
   );
 }
+
+type Status = 'correct' | 'incorrect' | 'undecided';
 
 function NewGame({
   newWord,
   setCurrentWord,
   setGuessedLetters,
+  setIsCorrect,
 }: {
   newWord: () => string[];
   setCurrentWord: (updater: (prev: string[]) => string[]) => void;
   setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
+  setIsCorrect: (updater: (prev: Status[]) => Status[]) => void;
 }) {
   function generateWord(): void {
     const updatedWord: string[] = newWord();
     setCurrentWord(() => updatedWord);
     setGuessedLetters(() => new Array(updatedWord.length).fill(''));
+    setIsCorrect((prev) => prev.map(() => 'undecided'));
   }
   return (
     <div className="new-game-div">
@@ -89,15 +92,6 @@ export function AssemblyEndGame() {
     new Array(26).fill('undecided'),
   );
 
-  const langArr = languages.map((lang, idx) => (
-    <LanguageSection
-      name={lang.name}
-      bgColor={lang.backgroundColor}
-      textColor={lang.textColor}
-      key={idx}
-    />
-  ));
-
   return (
     <>
       <Header />
@@ -105,9 +99,7 @@ export function AssemblyEndGame() {
       <p style={{ color: 'white', textAlign: 'center', marginTop: '2rem' }}>
         {currentWord}
       </p>
-      <div className="main-languages-div">
-        <div className="inner-main-lang-div">{langArr}</div>
-      </div>
+      <LanguageSection />
       <Input
         currentWord={currentWord}
         guessedLetters={guessedLetters}
@@ -119,6 +111,7 @@ export function AssemblyEndGame() {
         newWord={generateWord}
         setCurrentWord={setCurrentWord}
         setGuessedLetters={setGuessedLetters}
+        setIsCorrect={setIsCorrect}
       />
     </>
   );
