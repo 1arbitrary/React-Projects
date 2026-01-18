@@ -1,25 +1,32 @@
 import { Keyboard } from './Keyboard';
+import type { Status } from '../App';
 
-type Status = 'correct' | 'incorrect' | 'undecided';
 export function Input({
   currentWord,
   guessedLetters,
+  isCorrect,
   setGuessedLetters,
   setIsCorrect,
-  isCorrect,
+  setWrongGuesses,
+  wrongGuesses,
 }: {
   currentWord: string[];
   guessedLetters: string[];
-  setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
+  wrongGuesses: number;
   isCorrect: Status[];
+  setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
   setIsCorrect: (updater: (prev: Status[]) => Status[]) => void;
+  setWrongGuesses: (updater: (prev: number) => number) => void;
 }) {
   function assignColor(idx: number, status: boolean): void {
-    setIsCorrect((prev) => {
-      let updatedArray: Status[] = [...prev];
-      updatedArray[idx] = status ? 'correct' : 'incorrect';
-      return updatedArray;
-    });
+    const isFull = guessedLetters.every((element) => element !== '');
+    if (!isFull) {
+      setIsCorrect((prev) => {
+        const updatedArray: Status[] = [...prev];
+        updatedArray[idx] = status ? 'correct' : 'incorrect';
+        return updatedArray;
+      });
+    } else return;
   }
 
   function checkLetter(alphabet: string, idx: number): void {
@@ -27,15 +34,24 @@ export function Input({
       addLetter(alphabet);
       assignColor(idx, true);
     } else {
-      assignColor(idx, false);
+      if (wrongGuesses < 8) {
+        assignColor(idx, false);
+        setWrongGuesses((prev) => prev + 1);
+      }
     }
   }
 
   function addLetter(alphabet: string): void {
     let indexOfAlphabet: number = currentWord.indexOf(alphabet, 0);
-    while (indexOfAlphabet !== -1 && guessedLetters[indexOfAlphabet] !== '') {
+    const empty: string = '';
+    while (
+      indexOfAlphabet !== -1 &&
+      guessedLetters[indexOfAlphabet] !== empty
+    ) {
       indexOfAlphabet = currentWord.indexOf(alphabet, indexOfAlphabet + 1);
     }
+    if (indexOfAlphabet === -1) return;
+
     setGuessedLetters((prev) => {
       const updatedArray: string[] = [...prev];
       updatedArray[indexOfAlphabet] = alphabet;

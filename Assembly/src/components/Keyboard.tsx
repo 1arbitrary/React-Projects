@@ -1,6 +1,5 @@
 import { clsx } from 'clsx';
-
-type Status = 'correct' | 'incorrect' | 'undecided';
+import type { Status } from '../App';
 
 export function Keyboard({
   checkLetter,
