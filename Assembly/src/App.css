@@ -20,8 +20,10 @@
   --color-text-primary: #fff;
   --color-text-muted: grey;
   --color-status-success: seagreen;
+  --color-button-border: white;
   --color-status-error: firebrick;
   --color-status-neutral: #fcb22f;
+  --color-input-unguessed: orangered;
 
   /* SPACING : */
   --space-1: 4px;
@@ -50,6 +52,7 @@ header {
   display: flex;
   flex-flow: column nowrap;
   margin-block: calc(var(--space-4) * 2);
+  user-select: none;
 }
 
 .heading {
@@ -78,25 +81,25 @@ header {
 }
 
 .inner-status-div {
-    border-radius: var(--radius-md);
-    color: var(--color-text-primary);
-    padding: calc(var(--space-2) * 2);
-    text-align: center;
-    width: clamp(300px, 50vw, 550px);
-    height: clamp(120px, 6.5vw, 150px);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  padding: calc(var(--space-2) * 2);
+  text-align: center;
+  width: clamp(300px, 50vw, 550px);
+  height: clamp(120px, 6.5vw, 150px);
 }
 
 .status-primary-text {
-    font-size: clamp(1.15rem, calc(1vw + 0.75rem), 2rem);
-    font-weight: var(--font-weight-heading);
-    line-height: 1.25;
+  font-size: clamp(1.15rem, calc(1vw + 0.75rem), 2rem);
+  font-weight: var(--font-weight-heading);
+  line-height: 1.25;
 }
 
 .status-secondary-text {
-    font-size: clamp(0.95rem, calc(0.6vw + 0.5rem), 1.3rem);
-    font-weight: var(--font-weight-heading);
-    line-height: 1.5;
-    margin-block: var(--space-2);
+  font-size: clamp(0.95rem, calc(0.6vw + 0.5rem), 1.3rem);
+  font-weight: var(--font-weight-heading);
+  line-height: 1.5;
+  margin-block: var(--space-3);
 }
 
 .outer-lang-div {
@@ -157,26 +160,35 @@ header {
   flex-wrap: wrap;
   gap: var(--space-2);
   justify-content: center;
-  width: clamp(300px, 25vw, 550px);
+  width: clamp(300px, 32vw, 800px);
 }
 
 .keyboard-btn {
-  background-color: var(--color-status-neutral);
   border-radius: var(--radius-sm);
   border: none;
   color: black;
   font-weight: var(--font-weight-body);
-  height: clamp(28px, 2vw, 48px);
+  height: clamp(32px, 2.5vw, 64px);
   user-select: none;
-  width: clamp(28px, 2vw, 48px);
+  width: clamp(32px, 4vw, 84px);
+}
+
+.keyboard-btn.idle {
+  background-color: var(--color-status-neutral);
 }
 
 .keyboard-btn.correct {
   background-color: var(--color-status-success);
+  border: 1px solid var(--color-button-border);
+}
+
+.keyboard-btn.highlighted {
+  background-color: yellow;
 }
 
 .keyboard-btn.incorrect {
   background-color: var(--color-status-error);
+  border: 1px solid var(--color-button-border);
 }
 
 .keyboard-btn:hover {
@@ -189,6 +201,10 @@ header {
 
 .keyboard-btn:disabled {
   cursor: not-allowed;
+}
+
+.span-input.unguessed {
+  color: var(--color-input-unguessed);
 }
 
 .new-game-div {
