@@ -1,29 +1,31 @@
 import { clsx } from 'clsx';
-import type { Status } from '../App';
+import { buttonPhase } from '../App';
 
 export function Keyboard({
   checkLetter,
-  isCorrect,
+  buttonStatus,
 }: {
   checkLetter: (alphabet: string, idx: number) => void;
-  isCorrect: Status[];
+  buttonStatus: buttonPhase[];
 }) {
   const alphabetArray: string[] = 'abcdefghijklmnopqrstuvwxyz'
     .toUpperCase()
     .split('');
-
-  const mappedAlphabetArray = alphabetArray.map((alphabet, idx) => (
+  const mappedAlphabetArray = alphabetArray.map((element, idx) => (
     <button
-      key={alphabet}
+      key={idx}
       className={clsx(
         'keyboard-btn',
-        isCorrect[idx] === 'correct' && 'correct',
-        isCorrect[idx] === 'incorrect' && 'incorrect',
+        buttonStatus[idx] === buttonPhase.idle && 'idle',
+        buttonStatus[idx] === buttonPhase.correct && 'correct',
+        buttonStatus[idx] === buttonPhase.incorrect && 'incorrect',
+        buttonStatus[idx] === buttonPhase.highlighted && 'highlighted',
       )}
-      onClick={() => checkLetter(alphabet, idx)}
+      onClick={() => checkLetter(element, idx)}
     >
-      {alphabet}
+      {element}
     </button>
   ));
+
   return <div className="keyboard-div">{mappedAlphabetArray}</div>;
 }
