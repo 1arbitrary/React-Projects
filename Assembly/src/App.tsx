@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';
-import { languages } from './languages';
 import { wordsArr } from './words';
-import { Input } from './components/Input.tsx';
+import { Header } from './components/Header.tsx';
 import { Status } from './components/Status.tsx';
+import { LanguageSection } from './components/LanguageSection.tsx';
+import { Input } from './components/Input.tsx';
 import { NewGame } from './components/NewGame.tsx';
 import './App.css';
 
@@ -13,43 +14,10 @@ export enum buttonPhase {
   correct = 2,
   incorrect = 3,
   highlighted = 4,
-}
+};
 export type gameProgress = 'won' | 'lost' | 'ongoing';
 
-function Header() {
-  return (
-    <header>
-      <h1 className="heading">Assembly: Endgame</h1>
-      <p className="header-sub-text">
-        Guess the word in under 8 attempts to keep the programming world safe
-        from Assembly!
-      </p>
-    </header>
-  );
-}
-
-function LanguageSection() {
-  // Basically the logic is to cover a language with a skull if a wrong guess takes place
-  const LanguagesArray = languages.map((lang, idx) => (
-    <button
-      className="lang-btn"
-      key={idx}
-      style={{
-        background: lang.backgroundColor,
-        color: lang.textColor,
-      }}
-    >
-      {lang.name}
-    </button>
-  ));
-  return (
-    <div className="outer-lang-div">
-      <div className="inner-lang-div">{LanguagesArray}</div>
-    </div>
-  );
-}
-
-export function AssemblyEndGame() {
+export default function AssemblyEndGame() {
   function checkGameProgress(): void {
     if (gameStatus === 'ongoing') {
       const winCheck: boolean = guessedLetters.every(
@@ -67,11 +35,12 @@ export function AssemblyEndGame() {
   }
 
   const { width, height }: { width: number; height: number } = useWindowSize();
-  const generateWord = () =>
-    wordsArr[Math.floor(Math.random() * wordsArr.length)]
-      .toUpperCase()
-      .split('');
+  /* const generateWord = () =>
+   *   wordsArr[Math.floor(Math.random() * wordsArr.length)]
+   *     .toUpperCase()
+   *     .split(''); */
 
+  const generateWord = () => 'aaaaa'.toUpperCase().split('');
   const [currentWord, setCurrentWord] = useState<string[]>(generateWord);
   const [gameStatus, setGameStatus] = useState<gameProgress>('ongoing');
   const [wrongGuesses, setWrongGuesses] = useState<number>(0);
@@ -79,7 +48,7 @@ export function AssemblyEndGame() {
     new Array(currentWord.length).fill(''),
   );
   const [currentOccurrence, setCurrentOccurrences] = useState<number[]>(() =>
-    new Array(26).fill(0),
+    new Array(26).fill(1),
   );
   const [buttonStatus, setButtonStatus] = useState<buttonPhase[]>(() =>
     new Array(26).fill(buttonPhase.idle),

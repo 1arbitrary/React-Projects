@@ -1,4 +1,5 @@
-import { buttonPhase, type gameProgress } from '../App.tsx';
+import { buttonPhase } from '../App.tsx';
+import type { gameProgress } from '../App.tsx';
 
 export function NewGame({
   newWord,

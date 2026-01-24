@@ -22,7 +22,7 @@
   --color-status-success: seagreen;
   --color-button-border: white;
   --color-status-error: firebrick;
-  --color-status-neutral: #fcb22f;
+  --color-status-idle: #fcb22f;
   --color-input-unguessed: orangered;
 
   /* SPACING : */
@@ -174,7 +174,7 @@ header {
 }
 
 .keyboard-btn.idle {
-  background-color: var(--color-status-neutral);
+  background-color: var(--color-status-idle);
 }
 
 .keyboard-btn.correct {
@@ -183,7 +183,20 @@ header {
 }
 
 .keyboard-btn.highlighted {
-  background-color: yellow;
+  background-color: var(--color-status-idle);
+  animation: fade-out 1.5s ease-in-out 1 0s;
+}
+
+@keyframes fade-out {
+  0% {
+    background-color: var(--color-status-idle);
+  }
+  50% {
+    background-color: yellow;
+  }
+  100% {
+    background-color: var(--color-status-idle);
+  }
 }
 
 .keyboard-btn.incorrect {

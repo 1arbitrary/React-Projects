@@ -51,15 +51,15 @@ export function Input({
     }
 
     if (totalOccurrencesOfAlphabet > 0) {
-      if (currentOccurrence[idx] < totalOccurrencesOfAlphabet - 1) {
+      if (currentOccurrence[idx] < totalOccurrencesOfAlphabet) {
         addLetter(alphabet);
         assignColor(idx, buttonPhase.highlighted);
         setCurrentOccurrences((prev) => {
           const updatedArray: number[] = [...prev];
-          updatedArray[idx] = currentOccurrence[idx] + 1;
+          updatedArray[idx] = prev[idx] + 1;
           return updatedArray;
         });
-      } else if (currentOccurrence[idx] === totalOccurrencesOfAlphabet - 1) {
+      } else if (currentOccurrence[idx] === totalOccurrencesOfAlphabet) {
         addLetter(alphabet);
         assignColor(idx, buttonPhase.correct);
         return;
