@@ -35,7 +35,9 @@ export default function AssemblyEndGame() {
   }
 
   const { width, height }: { width: number; height: number } = useWindowSize();
-  const [currentWord, setCurrentWord] = useState<string[]>(() => getRandomWord());
+  const [currentWord, setCurrentWord] = useState<string[]>(() =>
+    getRandomWord(),
+  );
   const [gameStatus, setGameStatus] = useState<gameProgress>('ongoing');
   const [wrongGuesses, setWrongGuesses] = useState<number>(0);
   const [guessedLetters, setGuessedLetters] = useState<string[]>(() =>
@@ -66,7 +68,7 @@ export default function AssemblyEndGame() {
       <p style={{ color: 'white', textAlign: 'center', marginTop: '2rem' }}>
         {currentWord}
       </p>
-      <LanguageSection />
+      <LanguageSection wrongGuesses={wrongGuesses} />
       <Input
         buttonStatus={buttonStatus}
         currentWord={currentWord}

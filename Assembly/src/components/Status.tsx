@@ -1,4 +1,5 @@
 import type { gameProgress } from '../App';
+import { getFarewellText } from '../utils';
 
 export function Status({ gameStatus }: { gameStatus: gameProgress }) {
   type details = {

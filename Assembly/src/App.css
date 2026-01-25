@@ -128,6 +128,11 @@ header {
   width: fit-content;
 }
 
+.lang-btn.dead {
+    background-color: black;
+    color: red;
+}
+
 .input-div {
   align-items: center;
   color: var(--color-text-primary);
