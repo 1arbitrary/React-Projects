@@ -19,6 +19,7 @@ export function Keyboard({
             buttonStatus[idx] === buttonPhase.idle && 'idle',
             buttonStatus[idx] === buttonPhase.correct && 'correct',
             buttonStatus[idx] === buttonPhase.incorrect && 'incorrect',
+            buttonStatus[idx] === buttonPhase.highlighted && 'highlighted',
           )}
           onClick={() => checkLetter(element, idx)}
         >
