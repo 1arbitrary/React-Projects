@@ -28,6 +28,11 @@ export function Input({
 }) {
   function assignColor(idx: number, status: buttonPhase) {
     const isFull = guessedLetters.every((element) => element !== '');
+    if (initialVal.current[idx] !== undefined) {
+      clearTimeout(initialVal.current[idx]);
+      initialVal.current[idx] = undefined;
+    }
+
     if (!isFull) {
       setButtonStatus((prev) => {
         const updatedArray: buttonPhase[] = [...prev];
@@ -41,8 +46,8 @@ export function Input({
             updatedArray[idx] = buttonPhase.idle;
             return updatedArray;
           });
-        }, 800);
-      }
+        }, 600);
+      } else return;
     }
   }
 
@@ -112,7 +117,10 @@ export function Input({
 
   useEffect(() => {
     const refsArray = initialVal.current;
-    return () => refsArray.forEach((elem) => clearTimeout(elem));
+    return () =>
+      refsArray.forEach((elem) =>
+        elem !== undefined ? clearTimeout(elem) : undefined,
+      );
   }, []);
 
   return (

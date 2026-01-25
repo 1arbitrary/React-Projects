@@ -184,7 +184,7 @@ header {
 
 .keyboard-btn.highlighted {
   background-color: var(--color-status-idle);
-  animation: fade-out 1.5s ease-in-out 1 0s;
+  animation: fade-out 1.5s ease-in-out infinite 0s;
 }
 
 @keyframes fade-out {
