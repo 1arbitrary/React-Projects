@@ -46,7 +46,7 @@ export function Input({
             updatedArray[idx] = buttonPhase.idle;
             return updatedArray;
           });
-        }, 600);
+        }, 800);
       } else return;
     }
   }

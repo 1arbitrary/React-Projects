@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useWindowSize } from 'react-use';
-import Confetti from 'react-confetti';
-import { wordsArr } from './words';
+import { getRandomWord } from './utils.ts';
 import { Header } from './components/Header.tsx';
 import { Status } from './components/Status.tsx';
 import { LanguageSection } from './components/LanguageSection.tsx';
 import { Input } from './components/Input.tsx';
 import { NewGame } from './components/NewGame.tsx';
+import Confetti from 'react-confetti';
 import './App.css';
 
 export enum buttonPhase {
@@ -35,12 +35,7 @@ export default function AssemblyEndGame() {
   }
 
   const { width, height }: { width: number; height: number } = useWindowSize();
-  const generateWord = () =>
-    wordsArr[Math.floor(Math.random() * wordsArr.length)]
-      .toUpperCase()
-      .split('');
-
-  const [currentWord, setCurrentWord] = useState<string[]>(generateWord);
+  const [currentWord, setCurrentWord] = useState<string[]>(() => getRandomWord());
   const [gameStatus, setGameStatus] = useState<gameProgress>('ongoing');
   const [wrongGuesses, setWrongGuesses] = useState<number>(0);
   const [guessedLetters, setGuessedLetters] = useState<string[]>(() =>
@@ -86,7 +81,7 @@ export default function AssemblyEndGame() {
       />
       {gameStatus !== 'ongoing' && (
         <NewGame
-          newWord={generateWord}
+          newWord={getRandomWord}
           setButtonStatus={setButtonStatus}
           setCurrentOccurrences={setCurrentOccurrences}
           setCurrentWord={setCurrentWord}
