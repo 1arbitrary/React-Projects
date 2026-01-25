@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { clsx } from 'clsx';
 import { Keyboard } from './Keyboard';
 import { buttonPhase, type gameProgress } from '../App';
@@ -33,6 +34,15 @@ export function Input({
         updatedArray[idx] = status;
         return updatedArray;
       });
+      if (status === buttonPhase.highlighted) {
+        initialVal.current[idx] = setTimeout(() => {
+          setButtonStatus((prev) => {
+            const updatedArray: buttonPhase[] = [...prev];
+            updatedArray[idx] = buttonPhase.idle;
+            return updatedArray;
+          });
+        }, 800);
+      }
     }
   }
 
@@ -53,7 +63,7 @@ export function Input({
     if (totalOccurrencesOfAlphabet > 0) {
       if (currentOccurrence[idx] < totalOccurrencesOfAlphabet) {
         addLetter(alphabet);
-        // might need to put something
+        assignColor(idx, buttonPhase.highlighted);
         setCurrentOccurrences((prev) => {
           const updatedArray: number[] = [...prev];
           updatedArray[idx] = prev[idx] + 1;
@@ -80,7 +90,9 @@ export function Input({
         return updatedArray;
       });
   }
-
+  const initialVal = useRef<(number | undefined)[]>(
+    new Array(26).fill(undefined),
+  );
   const currentArray = guessedLetters.map((letter, idx) => (
     <span key={idx} className="span-input">
       {letter}
@@ -97,6 +109,11 @@ export function Input({
       </span>
     );
   });
+
+  useEffect(() => {
+    const refsArray = initialVal.current;
+    return () => refsArray.forEach((elem) => clearTimeout(elem));
+  }, []);
 
   return (
     <>
