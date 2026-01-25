@@ -1,4 +1,4 @@
-import { languages } from "../languages";
+import { languages } from '../languages';
 
 export function LanguageSection() {
   // Basically the logic is to cover a language with a skull if a wrong guess takes place

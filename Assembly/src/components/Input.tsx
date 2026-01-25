@@ -53,7 +53,7 @@ export function Input({
     if (totalOccurrencesOfAlphabet > 0) {
       if (currentOccurrence[idx] < totalOccurrencesOfAlphabet) {
         addLetter(alphabet);
-        assignColor(idx, buttonPhase.highlighted);
+        // might need to put something
         setCurrentOccurrences((prev) => {
           const updatedArray: number[] = [...prev];
           updatedArray[idx] = prev[idx] + 1;

@@ -1,4 +1,4 @@
-export default function Header() {
+export function Header() {
   return (
     <header>
       <h1 className="heading">Assembly: Endgame</h1>

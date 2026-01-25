@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';
-import { wordsArr } from './words';
+/* import { wordsArr } from './words'; */
 import { Header } from './components/Header.tsx';
 import { Status } from './components/Status.tsx';
 import { LanguageSection } from './components/LanguageSection.tsx';
@@ -13,8 +13,7 @@ export enum buttonPhase {
   idle = 1,
   correct = 2,
   incorrect = 3,
-  highlighted = 4,
-};
+}
 export type gameProgress = 'won' | 'lost' | 'ongoing';
 
 export default function AssemblyEndGame() {
@@ -40,7 +39,7 @@ export default function AssemblyEndGame() {
    *     .toUpperCase()
    *     .split(''); */
 
-  const generateWord = () => 'aaaaa'.toUpperCase().split('');
+  const generateWord = () => 'AAAAA'.split('');
   const [currentWord, setCurrentWord] = useState<string[]>(generateWord);
   const [gameStatus, setGameStatus] = useState<gameProgress>('ongoing');
   const [wrongGuesses, setWrongGuesses] = useState<number>(0);
