@@ -50,6 +50,5 @@ This repo reflects **progress**, not consistency.
 ---
 
 ## License
+[./LICENSE](LICENSE)
 
-Personal learning repository.  
-Feel free to explore, but do not treat this as production-ready reference code.
