@@ -1,11 +1,20 @@
 import { clsx } from 'clsx';
-import { languages } from '../languages';
+import { type Language } from '../languages';
 
-export function LanguageSection({ wrongGuesses }: { wrongGuesses: number }) {
-    // Basically the logic is to cover a language with a skull if a wrong guess takes place
+export function LanguageSection({
+  wrongGuesses,
+  languages,
+}: {
+  wrongGuesses: number;
+  languages: Language[];
+}) {
   const LanguagesArray = languages.map((lang, idx) => (
     <button
-      className={clsx('lang-btn')}
+      className={clsx(
+        'lang-btn',
+        idx < wrongGuesses && 'dead',
+        wrongGuesses === 8 && 'dead',
+      )}
       key={idx}
       style={{
         background: lang.backgroundColor,
