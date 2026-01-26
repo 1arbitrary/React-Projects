@@ -1,12 +1,19 @@
 export type progressObj = {
-  status?: string;
+  type: 'progress';
+  status: string;
   primaryText: string;
   secondaryText: string;
   backgroundColor: string;
   display: 'flex' | 'none';
 };
 
-export function getFarewellObject(language: string): progressObj {
+export type farewellObj = {
+  type: 'farewell';
+  backgroundColor: string;
+  primaryText: string;
+};
+
+export function getFarewellObject(language: string): farewellObj {
   const farewellColors: string[] = [
     '#7c5cff',
     '#facc15',
@@ -35,16 +42,16 @@ export function getFarewellObject(language: string): progressObj {
   );
 
   return {
+    type: 'farewell',
     backgroundColor: farewellColors[randomIndexForColor],
     primaryText: options[randomIndexForText],
-    secondaryText: '',
-    display: 'flex',
   };
 }
 
 export function updateProgress(status: string): progressObj {
   const gameProgress: progressObj[] = [
     {
+      type: 'progress',
       status: 'won',
       primaryText: 'You Win!',
       secondaryText: 'Well Done ! 🎉',
@@ -52,6 +59,7 @@ export function updateProgress(status: string): progressObj {
       display: 'flex',
     },
     {
+      type: 'progress',
       status: 'lost',
       primaryText: 'Game Over!',
       secondaryText: 'You Lose! Better Start Learning Assembly 😭',
@@ -59,6 +67,7 @@ export function updateProgress(status: string): progressObj {
       display: 'flex',
     },
     {
+      type: 'progress',
       status: 'ongoing',
       primaryText: '',
       secondaryText: '',

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { getFarewellObject, updateProgress } from './gameStatusConfig';
 
-import type { progressObj } from './gameStatusConfig';
+import type { farewellObj, progressObj } from './gameStatusConfig';
 import type { Language } from '../../languages';
 
 export function Status({
@@ -14,7 +14,8 @@ export function Status({
   gameStatus: string;
   languages: Language[];
 }) {
-  const evaledObj = useMemo((): progressObj => {
+  type statusObj = progressObj | farewellObj;
+  const evaledObj = useMemo((): statusObj => {
     const idxOfLang = wrongGuesses - 1;
     if (wrongGuesses < 8 && idxOfLang !== -1)
       return getFarewellObject(languages[idxOfLang].name);
@@ -29,7 +30,7 @@ export function Status({
       className="status-div"
       style={{
         display:
-          evaledObj.display !== undefined ? evaledObj.display : 'inherit',
+          evaledObj.type === 'progress' ? evaledObj.display : 'flex',
       }}
     >
       <div
@@ -40,7 +41,7 @@ export function Status({
           {evaledObj.primaryText !== undefined ? evaledObj.primaryText : null}
         </p>
         <p className="status-secondary-text">
-          {evaledObj.secondaryText !== undefined
+          {evaledObj.type === 'progress'
             ? evaledObj.secondaryText
             : null}
         </p>
