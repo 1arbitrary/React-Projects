@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { clsx } from 'clsx';
 import { Keyboard } from './Keyboard';
-import { buttonPhase, type gameProgress } from '../App';
+import { buttonPhase } from '../App';
 
 export function Input({
   buttonStatus,
@@ -18,7 +18,7 @@ export function Input({
   buttonStatus: buttonPhase[];
   currentOccurrence: number[];
   currentWord: string[];
-  gameStatus: gameProgress;
+  gameStatus: string;
   guessedLetters: string[];
   wrongGuesses: number;
   setButtonStatus: (updater: (prev: buttonPhase[]) => buttonPhase[]) => void;

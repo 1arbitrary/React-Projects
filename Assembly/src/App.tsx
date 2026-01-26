@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useWindowSize } from 'react-use';
-import { getRandomWord } from './utils.ts';
+import Confetti from 'react-confetti';
+
+import { wordsArr as words } from './words.ts';
+import { languages } from './languages.ts';
+
 import { Header } from './components/Header.tsx';
-import { Status } from './components/Status.tsx';
+import { Status } from './components/Status/Status.tsx';
 import { LanguageSection } from './components/LanguageSection.tsx';
 import { Input } from './components/Input.tsx';
 import { NewGame } from './components/NewGame.tsx';
-import Confetti from 'react-confetti';
 import './App.css';
 
 export enum buttonPhase {
@@ -15,42 +18,36 @@ export enum buttonPhase {
   incorrect = 3,
   highlighted = 4,
 }
-export type gameProgress = 'won' | 'lost' | 'ongoing';
 
 export default function AssemblyEndGame() {
-  function checkGameProgress(): void {
-    if (gameStatus === 'ongoing') {
-      const winCheck: boolean = guessedLetters.every(
-        (element) => element !== '',
-      );
-      if (winCheck) {
-        setGameStatus('won');
-        return;
-      }
-      if (wrongGuesses === 8) {
-        setGameStatus('lost');
-        return;
-      }
-    }
+  function getRandomWord(): string[] {
+    const randomIndex = Math.floor(Math.random() * words.length);
+    return words[randomIndex].toUpperCase().split('');
   }
 
   const { width, height }: { width: number; height: number } = useWindowSize();
   const [currentWord, setCurrentWord] = useState<string[]>(() =>
     getRandomWord(),
   );
-  const [gameStatus, setGameStatus] = useState<gameProgress>('ongoing');
   const [wrongGuesses, setWrongGuesses] = useState<number>(0);
   const [guessedLetters, setGuessedLetters] = useState<string[]>(() =>
     new Array(currentWord.length).fill(''),
   );
+
+  const gameStatus = useMemo((): string => {
+    const winCheck: boolean = guessedLetters.every((element) => element !== '');
+    if (winCheck) return 'won';
+    if (wrongGuesses === 8) return 'lost';
+    else return 'ongoing';
+  }, [guessedLetters, wrongGuesses]);
+
   const [currentOccurrence, setCurrentOccurrences] = useState<number[]>(() =>
     new Array(26).fill(1),
   );
+
   const [buttonStatus, setButtonStatus] = useState<buttonPhase[]>(() =>
     new Array(26).fill(buttonPhase.idle),
   );
-
-  useEffect(checkGameProgress, [guessedLetters, wrongGuesses, gameStatus]);
 
   return (
     <>
@@ -64,11 +61,15 @@ export default function AssemblyEndGame() {
         />
       )}
       <Header />
-      <Status gameStatus={gameStatus} />
+      <Status
+        gameStatus={gameStatus}
+        wrongGuesses={wrongGuesses}
+        languages={languages}
+      />
       <p style={{ color: 'white', textAlign: 'center', marginTop: '2rem' }}>
         {currentWord}
       </p>
-      <LanguageSection wrongGuesses={wrongGuesses} />
+      <LanguageSection wrongGuesses={wrongGuesses} languages={languages} />
       <Input
         buttonStatus={buttonStatus}
         currentWord={currentWord}
@@ -87,7 +88,6 @@ export default function AssemblyEndGame() {
           setButtonStatus={setButtonStatus}
           setCurrentOccurrences={setCurrentOccurrences}
           setCurrentWord={setCurrentWord}
-          setGameStatus={setGameStatus}
           setGuessedLetters={setGuessedLetters}
           setWrongGuesses={setWrongGuesses}
         />

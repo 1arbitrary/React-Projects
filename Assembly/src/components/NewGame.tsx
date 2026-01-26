@@ -1,12 +1,10 @@
 import { buttonPhase } from '../App.tsx';
-import type { gameProgress } from '../App.tsx';
 
 export function NewGame({
   newWord,
   setButtonStatus,
   setCurrentOccurrences,
   setCurrentWord,
-  setGameStatus,
   setGuessedLetters,
   setWrongGuesses,
 }: {
@@ -14,7 +12,6 @@ export function NewGame({
   setButtonStatus: (updater: (prev: buttonPhase[]) => buttonPhase[]) => void;
   setCurrentOccurrences: (updater: (prev: number[]) => number[]) => void;
   setCurrentWord: (updater: (prev: string[]) => string[]) => void;
-  setGameStatus: (updater: (prev: gameProgress) => gameProgress) => void;
   setGuessedLetters: (updater: (prev: string[]) => string[]) => void;
   setWrongGuesses: (updater: (prev: number) => number) => void;
 }) {
@@ -26,7 +23,6 @@ export function NewGame({
     setButtonStatus(() => new Array(keyboardSize).fill(buttonPhase.idle));
     setWrongGuesses(() => 0);
     setCurrentOccurrences(() => new Array(keyboardSize).fill(1));
-    setGameStatus(() => 'ongoing');
   }
   return (
     <div className="new-game-div">
