@@ -25,6 +25,9 @@
   --color-status-idle: #fcb22f;
   --color-input-unguessed: orangered;
 
+  /* LAYOUT / COMPONENT SIZES */
+  --status-height: clamp(120px, 6.5vw, 150px);
+
   /* SPACING : */
   --space-1: 4px;
   --space-2: 8px;
@@ -83,10 +86,13 @@ header {
 .inner-status-div {
   border-radius: var(--radius-md);
   color: var(--color-text-primary);
+  display: inherit;
+  flex-flow: column nowrap;
+  height: var(--status-height);
+  justify-content: space-evenly;
   padding: calc(var(--space-2) * 2);
   text-align: center;
   width: clamp(300px, 50vw, 550px);
-  height: clamp(120px, 6.5vw, 150px);
 }
 
 .status-primary-text {
@@ -125,12 +131,20 @@ header {
   font-weight: var(--font-weight-body);
   height: fit-content;
   padding: 9px;
+  position: relative;
   width: fit-content;
 }
 
-.lang-btn.dead {
-    background-color: black;
-    color: red;
+.lang-btn.dead::after {
+  align-items: center;
+  background-color: black;
+  border-radius: inherit;
+  content: '💀';
+  display: flex;
+  inset: 0;
+  opacity: 0.85;
+  justify-content: center;
+  position: absolute;
 }
 
 .input-div {
